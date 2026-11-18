@@ -6,13 +6,12 @@ its Rake tasks for Wrangler.
 
 ## Create a Worker
 
-After publishing this repository on GitHub, pass the repository to C3.
-Replace `YOUR_ACCOUNT` with the GitHub owner.
+Pass `uzumibirb/picoruby-rack` to C3 to create a project from GitHub.
 
 ```sh
 npm create cloudflare@latest my-worker -- \
   --category remote-template \
-  --template YOUR_ACCOUNT/picoruby-cloudflare-c3-template \
+  --template uzumibirb/picoruby-rack \
   --lang js --no-deploy
 cd my-worker
 ```
@@ -30,10 +29,10 @@ The URL rewrite applies only to this command.
 ```sh
 GIT_CONFIG_COUNT=1 \
   GIT_CONFIG_KEY_0="url.file://$(pwd -P).insteadOf" \
-  GIT_CONFIG_VALUE_0=ssh://git@github.com/local/picoruby-cloudflare-c3-template \
+  GIT_CONFIG_VALUE_0=ssh://git@github.com/uzumibirb/picoruby-rack \
   npm create cloudflare@latest /tmp/my-pico-worker -- \
     --category remote-template \
-    --template local/picoruby-cloudflare-c3-template \
+    --template uzumibirb/picoruby-rack \
     --template-mode git --no-git --no-agents --lang js --no-deploy --accept-defaults
 ```
 
