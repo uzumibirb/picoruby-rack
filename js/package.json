@@ -1,0 +1,16 @@
+{
+  "name": "<PACKAGE_NAME>",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bundle exec rake build",
+    "generate:bindings": "bundle exec rake build",
+    "dev": "bundle exec rake dev",
+    "check": "bundle exec rake check",
+    "deploy": "bundle exec rake deploy",
+    "setup:bindings": "node scripts/setup-bindings.mjs"
+  },
+  "devDependencies": {
+    "jsonc-parser": "3.2.0"
+  }
+}

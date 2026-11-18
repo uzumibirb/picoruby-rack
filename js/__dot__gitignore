@@ -1,0 +1,10 @@
+/.bundle/
+/.picoruby-build/
+/generated/
+/node_modules/
+/.wrangler/
+/.dev.vars
+/.dev.vars.*
+/.env
+/.env.*
+/.picoruby-cloudflare-wrangler.jsonc
