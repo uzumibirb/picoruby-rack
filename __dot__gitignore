@@ -1,5 +1,6 @@
 /.bundle/
 /.picoruby-build/
+/picoruby/
 /generated/
 /node_modules/
 /.wrangler/

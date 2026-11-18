@@ -21,11 +21,17 @@ dependencies. Continue in the generated project with the steps below.
 
 ## Local development
 
-1. Install Ruby >= 3.2 and Node.js (supported by Wrangler). On macOS, install Emscripten via Homebrew as shown below.
-2. Set `PICORUBY_ROOT` to a PicoRuby checkout with its submodules initialized.
-3. Run `bundle install`. C3 has already installed the Node dependencies. Run `npm install` after cloning this project.
-4. Run `bundle exec rake doctor` to check the build prerequisites.
-5. Run `npm run dev`. Wrangler's custom build also runs Rake on startup and Ruby changes.
+1. Install Git, Ruby >= 3.2 and Node.js (supported by Wrangler). On macOS, install Emscripten via Homebrew as shown below.
+2. Run `bundle install`. C3 has already installed the Node dependencies. Run `npm install` after cloning this project.
+3. Run `bundle exec rake doctor` to check the build prerequisites.
+4. Run `npm run dev`. Wrangler's custom build also runs Rake on startup and Ruby changes.
+
+On the first `doctor`, `build`, `dev`, `check` or `deploy` with
+`PICORUBY_ROOT` unset, Rake clones the
+[latest PicoRuby release](https://github.com/picoruby/picoruby/releases/latest)
+and its submodules into the project's Git-ignored `picoruby/` directory.
+Later runs reuse that checkout without fetching updates. To use another
+checkout, set `PICORUBY_ROOT` to its path after initializing its submodules.
 
 ```sh
 brew install emscripten
