@@ -82,12 +82,48 @@ rackEnv, response)` may return a replacement `Response` or `undefined` to keep
 the original response. Exceptions are logged by the generated Worker handler.
 These hooks require a Worker runtime with `handleRequestWithOptions` and ABI 8.
 
-Configure bindings in `wrangler.jsonc`; the build regenerates `bindings.js`.
-Ruby can use `env["cloudflare.env"].CACHE_KV` or
-`Cloudflare::KV.from_env(env, "CACHE_KV")`, and similarly `Cloudflare::Queue.from_env`.
-Durable Objects use `Cloudflare::DurableObject.from_env`; `put` accepts POJO,
-Hash, Array, or an object responding to `to_pojo`.
-String/JSON vars and secrets are accessible through Ruby `ENV`.
+## Ruby APIs
+
+The template's default Worker runtime is `0.10.0`. Ruby code can make
+buffered HTTP(S) calls with `Cloudflare.fetch(url, method:, headers:, body:)`.
+The returned `Cloudflare::FetchResponse` exposes `status`, `headers`, and `body`.
+
+For secure randomness, use `SecureRandom.random_bytes`,
+`SecureRandom.random_number`, or `SecureRandom.hex`. The runtime uses Web
+Crypto for these APIs and for AES-GCM encryption.
+
+```ruby
+key = SecureRandom.random_bytes(32)
+iv, encrypted = Crypto.encrypt(:AES_GCM, key, plaintext)
+decrypted = Crypto.decrypt(:AES_GCM, key, iv, encrypted)
+```
+
+See the [Worker runtime docs](https://github.com/udzura/picoruby-cloudflare-worker-wasm/tree/master/docs)
+and [examples](https://github.com/udzura/picoruby-cloudflare-worker-wasm/tree/master/examples)
+for signatures, limits, and complete applications. Check each example's
+runtime revision when using APIs introduced after `0.10.0`.
+
+### Resource bindings
+
+Configure resources in `wrangler.jsonc`. The build regenerates `bindings.js`,
+and the Rack environment exposes the resulting bindings through
+`env["cloudflare.env"]`, a `Cloudflare::Environment` proxy.
+
+| Binding | Wrangler setting | Ruby class |
+| --- | --- | --- |
+| Workers KV | `kv_namespaces` | `Cloudflare::KV` |
+| Queues producer | `queues.producers` | `Cloudflare::Queue` |
+| Durable Objects | `durable_objects.bindings` | `Cloudflare::DurableObject` |
+| D1 | `d1_databases` | `Cloudflare::D1` |
+| R2 | `r2_buckets` | `Cloudflare::R2` |
+| Workers AI | `ai` | `Cloudflare::AI` |
+| Vectorize | `vectorize` | `Cloudflare::Vectorize` |
+
+For example, `env["cloudflare.env"].CACHE_KV` and
+`Cloudflare::KV.from_env(env, "CACHE_KV")` resolve the same KV binding.
+`Cloudflare::DurableObject#put` accepts a POJO, Hash, Array, or an object
+responding to `to_pojo`. Ruby `ENV` exposes variables and secrets as strings,
+including serialized JSON for JSON variables.
 
 Run `npm run setup:bindings` or `bundle exec rake setup:bindings` to add
 `/kv`, `/queue`, `/durable-object` and `/access` to the starter app,
@@ -95,6 +131,8 @@ along with the example Wrangler configuration.
 The command preserves unrelated Wrangler settings and checks for conflicts
 before writing. The `.picoruby-cloudflare-template.json` manifest tracks
 `app.rb` and `wrangler.jsonc` for subsequent runs.
+
+### Cloudflare Access
 
 For `/access`, set `CF_ACCESS_TEAM` to your team name (not its URL) in Wrangler vars
 or .dev.vars, and send a `CF_Authorization` cookie issued by Access.
