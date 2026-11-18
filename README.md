@@ -89,8 +89,9 @@ Durable Objects use `Cloudflare::DurableObject.from_env`; `put` accepts POJO,
 Hash, Array, or an object responding to `to_pojo`.
 String/JSON vars and secrets are accessible through Ruby `ENV`.
 
-Run `npm run setup:bindings` to add `/kv`, `/queue`, `/durable-object` and
-`/access` to the starter app, along with the example Wrangler configuration.
+Run `npm run setup:bindings` or `bundle exec rake setup:bindings` to add
+`/kv`, `/queue`, `/durable-object` and `/access` to the starter app,
+along with the example Wrangler configuration.
 The command preserves unrelated Wrangler settings and checks for conflicts
 before writing. The `.picoruby-cloudflare-template.json` manifest tracks
 `app.rb` and `wrangler.jsonc` for subsequent runs.

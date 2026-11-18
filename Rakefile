@@ -10,3 +10,10 @@ end
 %i[build dev check deploy doctor].each do |name|
   Rake::Task[name].enhance([:prepare_picoruby])
 end
+
+namespace :setup do
+  desc "Add the Cloudflare binding examples"
+  task :bindings do
+    sh "npm", "run", "setup:bindings", chdir: __dir__
+  end
+end
